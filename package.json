@@ -1,14 +1,11 @@
 {
-  "name": "nodejs",
+  "name": "discord-bot",
   "version": "1.0.0",
+  "description": "My Discord bot",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "discord-playing": "^2.4.4",
     "discord-youtube-api": "^0.1.0",
@@ -19,8 +16,10 @@
     "quick.db": "^7.1.3",
     "rss-parser": "^3.12.0"
   },
-  "devDependencies": {
-    "node": "^16.9.0"
+  "engines": {
+    "node": "20.x"
   },
-  "description": ""
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
