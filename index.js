@@ -85,9 +85,7 @@ client.on('shardReconnecting', (shardId) => {
 //files data: Last updated (?/?/????)
 // ============================================================================================================
 
-const keepAlive = require("./server");
-require('./server.js');
-
+const keepAlive = require('./server.js');
 client.config = require("./config.js");//for video notifier
 
 var http = require('http');
