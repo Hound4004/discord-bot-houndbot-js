@@ -215,19 +215,33 @@ const rawData = pingCommand.toJSON();
 const triggerWords = ['banana', 'fire', 'white'];
 
 client.on('messageCreate', (message) => {
+  const message_content = message.content.toLowerCase(); //Lets simplify the message to the letters
+
   triggerWords.forEach((word) => {
-    if (message.content.includes(word) && message.author.id != 946745700966891550) {
-      message.reply(message.content);
+    if (message_content.includes(word) && message.author.id != 946745700966891550) {
+      message.reply(message_content);
     }})
   
-  if (message.content == "hi") {
+  if (message_content == "hi") {
     message.reply({ content: 'hello', allowedMentions: { repliedUser: false } });
   }
+  
+  Swear_detect(message_content, message); //This calls to the swear detect function below. passes the message to said fuction
 });
 
 //Swear Bot
-function Swear_detect() {
-  var { bad_words } = require('./Swear_Bot_vocab.js');
+function Swear_detect(message_content,message) {
+  const { bad_words } = require('./Swear_Bot_vocab.js');
+    bad_words.forEach(bad_word => {
+        if (message_content.includes(bad_word)) {
+            message.reply("No swearing please! 😊");
+            message.react('❌');
+        }
+    });
+}
+
+  
+  /*
   client.on("messageCreate", async (msg) => {
     let mutedRole = msg.guild.roles.cache.find((role) => role.name === 'Muted');
     if (!mutedRole) {
@@ -302,6 +316,8 @@ function Swear_detect() {
   });
   Check_Functions = Check_Functions + 1;
 }//Swear Bot End
+*/
+
 function RemoveRole(member, role) {
   member.roles.remove(role);
 }
