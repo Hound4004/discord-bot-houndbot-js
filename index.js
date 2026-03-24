@@ -42,8 +42,6 @@ const client = new Client({
   ]
 });
 
-const userWarnings = {};
-
 client.events = new Collection();
 client.commands = new Collection();
 client.slashCommands = new Collection();
@@ -91,7 +89,6 @@ const keepAlive = require("./server");
 require('./server.js');
 
 client.config = require("./config.js");//for video notifier
-client.bdays = require("./saved_bday_data.js")
 
 var http = require('http');
 var server = http.createServer(function(req, res) {
@@ -612,64 +609,6 @@ function handleUploads() {
 
 //========================================================================
 //========================================================================
-//birthdays
-var dayDone = false;
-var currentDate = new Date();
-var day = currentDate.getDate();
-var month = currentDate.getMonth() + 1;
-var year = currentDate.getFullYear();
-setInterval(checkDate, 1800000, day);
-var birthdays = [];
-for (var key in client.bdays) {
-  if (client.bdays.hasOwnProperty(key)) {
-    birthdays.push(client.bdays[key]);
-  }
-}
-if (!dayDone) {
-  for (var i = 0; i < birthdays.length; i++) {
-    var birthday = birthdays[i].substring(birthdays[i].indexOf("sb|") + 3, birthdays[i].indexOf("|eb"));
-    var userID = birthdays[i].substring(birthdays[i].indexOf("si|") + 3, birthdays[i].indexOf("|ei"));
-
-    if (birthday.substring(0, 2) == day && birthday.substring(2, 4) == month) {
-      const userMention = `<@${userID}>`;
-      const age = year - parseInt(birthday.substring(4, 8));
-      client.on('ready', () => {
-        client.channels.cache.get('707687634381570142').send(`It's ${userMention}'s ${age}th Birthday Today!! :tada::tada::birthday::tada::tada:`);
-      });
-    }
-  }
-  dayDone = true;
-}
-
-function checkDate(oldDay) {
-  console.log("checking if the date has changed");
-  var date = new Date();
-  var day = date.getDate();
-  if (day != oldDay && !dayDone) {
-    dayDone = false;
-    console.log("date has changed");
-    currentDate = date;
-    for (var i = 0; i < birthdays.length; i++) {
-      var birthday = birthdays[i].substring(birthdays[i].indexOf("sb|") + 3, birthdays[i].indexOf("|eb"));
-      var userID = birthdays[i].substring(birthdays[i].indexOf("si|") + 3, birthdays[i].indexOf("|ei"));
-
-      if (birthday.substring(0, 2) == day && birthday.substring(2, 4) == month) {
-        const userMention = `<@${userID}>`;
-        const age = year - parseInt(birthday.substring(4, 8));
-        client.on('ready', () => {
-          client.channels.cache.get('707687634381570142').send(`It's ${userMention}'s ${age}th Birthday Today!! :tada::tada::birthday::tada::tada:`);
-        });
-      }
-    }
-    dayDone = true;
-  } else {
-    console.log("date has not changed");
-  }
-}
-
-//========================================================================
-//========================================================================
-
 
 //need
 Bot_Alive();
@@ -698,7 +637,6 @@ commands.push(
   /*["Command", Function]*/
   ["!ChannelPost", UploadSim],
   ["!Random Number", Random],
-  ["!NewBirthday", AddBirthday],
   ["!NewPoll", CreatePoll]
 )
 
@@ -790,64 +728,6 @@ function Random(message, parameters) {
     max = 10;
   }
   message.channel.send("Your number between " + min + " and " + max + " is " + Math.floor(Math.random() * (max - min + 1) + min).toString());
-}
-
-function AddBirthday(message, parameters) {
-  var day = parameters[0];
-  var month = parameters[1];
-  var year = parameters[2];
-  var userid = parameters[3];
-  if (userid) {
-    userid = userid.substring(userid.indexOf("<@") + 2, userid.indexOf(">"));
-  }
-  if (!day) {
-    date = new Date();
-    day = currentDate.getDate();
-    month = currentDate.getMonth() + 1;
-    year = currentDate.getFullYear();
-  } else if (!month) {
-    date = new Date();
-    month = currentDate.getMonth() + 1;
-    year = currentDate.getFullYear();
-  } else if (!year) {
-    date = new Date();
-    year = currentDate.getFullYear();
-  }
-  if (!userid) {
-    userid = message.author.id;
-    console.log("improvUser");
-  }
-  if (month.toString().length == 1) {
-    month = "0" + month.toString();
-  } else {
-    day = day.toString();
-    month = month.toString();
-    year = year.toString();
-  }
-  var string = "si|" + userid.toString() + "|ei sb|" + day + month + year + "|eb";
-  console.log(string);
-  const fs = require('fs');
-  client.users.fetch(userid)
-    .then(user => {
-      const username = user.username;
-      console.log(username);
-
-      const filePath = 'saved_bday_data.js';
-      fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        const modifiedContent = data.replace("}", username + ': "' + string + '",\n }');
-        fs.writeFile(filePath, modifiedContent, 'utf8', (err) => {
-          if (err) {
-            console.error(err);
-            return;
-          }
-        });
-      });
-    })
-    .catch(console.error);
 }
 
 
