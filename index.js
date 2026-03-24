@@ -1,4 +1,26 @@
 
+
+
+// ===============================================================================
+// GLOBAL ERROR HANDLING Updated (3/24/2026)
+// ===============================================================================
+
+// Catch sync errors (crashes)
+process.on('uncaughtException', (err) => {
+  console.error('🔥 Uncaught Exception:');
+  console.error(err);
+});
+
+// Catch async errors (promises)
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('🔥 Unhandled Rejection at:', promise);
+  console.error('Reason:', reason);
+});
+
+// ===============================================================================
+
+
+
 const { Client, Intents, MessageButton, MessageActionRow, ButtonBuilder, ButtonStyle, MessageEmbed, EmbedBuilder, Partials, Events, Collection, WebhookClient, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
 
 const Discord = require('discord.js'); //if future error... remove this badboy!
@@ -40,6 +62,31 @@ client.db = require("quick.db");
 client.request = new (require("rss-parser"))();
 
 require('events').EventEmitter.defaultMaxListeners = 20;
+
+
+// ===============================================================================
+// Discord (client) ERROR HANDLING Updated (3/24/2026)
+// ===============================================================================
+// Discord client errors
+client.on('error', (err) => {
+  console.error('🤖 Discord Client Error:', err);
+});
+
+// Discord warnings (rate limits, etc.)
+client.on('warn', (info) => {
+  console.warn('⚠️ Discord Warning:', info);
+});
+
+// Optional: log when bot disconnects/reconnects
+client.on('shardDisconnect', (event, shardId) => {
+  console.warn(`⚠️ Shard ${shardId} disconnected`, event);
+});
+
+client.on('shardReconnecting', (shardId) => {
+  console.log(`🔄 Shard ${shardId} reconnecting...`);
+});
+
+// ===============================================================================
 
 
 //files data
@@ -317,8 +364,6 @@ function reactionroles() {
     }
   });
 
-
-  client.login(process.env.TOKEN);
   function AllNotifications(user) {
     const guild = client.guilds.cache.get("599652841132392476");
     const member = guild.members.cache.get(user.id);
