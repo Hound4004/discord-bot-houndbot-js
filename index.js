@@ -189,9 +189,14 @@ client.on('messageCreate', (message) => {
   Swear_detect(message_content, message); //This calls to the swear detect function below. passes the message to said fuction
 });
 
+
 //Swear Bot
+
+const recentSwears = {};
+
 function Swear_detect(message_content,message) {
   const { bad_words } = require('./Swear_Bot_vocab.js');
+  const userId = message.author.id;
   let message_contains_bad_word = false
 
   bad_words.forEach(bad_word => {
@@ -199,93 +204,41 @@ function Swear_detect(message_content,message) {
       message_contains_bad_word = true
     }
   });
-  if (message_contains_bad_word==true){
-    message.reply("No swearing please! 😊");
+
+  if(message_contains_bad_word==true){
+    const now = Date.now();   // Get current time
+   // Clean up old swears (keep only last 5 minutes)
+    if (!recentSwears[userId]) {
+      recentSwears[userId] = [];
+    }
+    recentSwears[userId] = recentSwears[userId].filter(time => now - time < 300000);
+        recentSwears[userId].push(now);
+    
+    // Count swears in last 5 minutes
+    const swearCount = recentSwears[userId].length;
+    
     message.react('❌');
+    
+    if (swearCount == 1) {
+      message.reply("No swearing please! 😊");
+    }
+    else if (swearCount == 2) {
+      message.reply("I already told you! No swearing! ⚠️");
+    }
+    else if (swearCount >= 3) {
+      message.reply("FINAL WARNING! Stop swearing or you'll be muted! 🚫");
+    }
+    
+    message.delete().catch(console.error);
   }
+  Check_Functions = Check_Functions + 1;
 }
+//========================================================================
+//end swear bot
+//========================================================================
 
   
-  /*
-  client.on("messageCreate", async (msg) => {
-    let mutedRole = msg.guild.roles.cache.find((role) => role.name === 'Muted');
-    if (!mutedRole) {
-      try {
-        mutedRole = await msg.guild.roles.create({
-          name: 'Muted',
-          permissions: [],
-          reason: 'Muted role creation'
-        });
-        msg.guild.channels.cache.forEach((channel) => {
-          channel.permissionOverwrites.create({
-            role: mutedRole,
-            permissions: [
-              {
-                id: mutedRole.id,
-                deny: ['SEND_MESSAGES']
-              }
-            ]
-          }).catch(error => {
-            console.error('Failed to set channel permissions:', error);
-          });
-        });
-        console.log('Muted role created successfully.');
-      } catch (error) {
-        console.error('Failed to create muted role:', error);
-      }
-    }
-    if (bad_words.some((word) => msg.content.toLowerCase().includes(" " + word + " "))) {
-      if (userWarnings[msg.author.username] == 4) {
-        msg.reply({ content: 'No swearing. FINAL WARNING!', allowedMentions: { repliedUser: true } });
-      } else {
-        if (userWarnings[msg.author.username] > 4 && userWarnings[msg.author.username] < 7) {
-          msg.reply({ content: 'No swearing. You will be muted for an hour.', allowedMentions: { repliedUser: true } });
-        } else {
-          if (userWarnings[msg.author.username] == 15) {
-            msg.reply({ content: msg.author.username + 'was kicked for excessive swearing', allowedMentions: { repliedUser: true } });
-          } else {
-            if (userWarnings[msg.author.username] > 6) {
-              msg.reply({ content: 'No swearing. You will be muted for a day', allowedMentions: { repliedUser: true } });
-            }
-            msg.reply({ content: 'No swearing. This is a warning!', allowedMentions: { repliedUser: true } });
-          }
-        }
-      }
-      msg.react('❌');
-      if (!userWarnings[msg.author.username]) {
-        userWarnings[msg.author.username] = 0;
-      }
-      userWarnings[msg.author.username]++;
-      if (userWarnings[msg.author.username] > 4) {
-        if (mutedRole) {
-          console.log(msg.author);
-          try {
-            const member = await msg.guild.members.fetch(msg.author.id);
-            member.roles.add(mutedRole);
-            if (userWarnings[msg.author.username] > 4 && userWarnings[msg.author.username] < 7) {
-              setTimeout(RemoveRole, 3600000, member, mutedRole);
-            } else {
-              if (userWarnings[msg.author.username] > 14) {
-                await msg.author.kick();
-              } else {
-                setTimeout(RemoveRole, 86400000, member, mutedRole);
-              }
-            }
-            console.log('User muted successfully.');
-          } catch (error) {
-            console.error('Failed to mute user:', error);
-          }
-        }
-      }
-    }
-  });
-  Check_Functions = Check_Functions + 1;
-}//Swear Bot End
-*/
 
-function RemoveRole(member, role) {
-  member.roles.remove(role);
-}
 
 
 //========================================================================
