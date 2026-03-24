@@ -3,11 +3,9 @@
 // This bot's index was last updated (3/24/2026)
 // ============================================================================================================
 
-
 // ============================================================================================================
 // GLOBAL ERROR HANDLING Updated (3/24/2026)
 // ============================================================================================================
-
 // Catch sync errors (crashes)
 process.on('uncaughtException', (err) => {
   console.error('🔥 Uncaught Exception:');
@@ -24,19 +22,15 @@ process.on('unhandledRejection', (reason, promise) => {
 
 const { Client, Intents, MessageButton, MessageActionRow, ButtonBuilder, ButtonStyle, MessageEmbed, EmbedBuilder, Partials, Events, Collection, WebhookClient, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
 
-const Discord = require('discord.js'); //if future error... remove this badboy!
-
 const client = new Client({
   intents: [
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildPresences,
-    //    GatewayIntentBits.GuildPresences,
     GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.DirectMessages,
     GatewayIntentBits.MessageContent,
-    //    GatewayIntentBits.GuildMembers
 
   ],
   partials: [
@@ -106,8 +100,7 @@ var server = http.createServer(function(req, res) {
 server.on('listening', function() {
   console.log('ok, server is running');
 });
-server.listen(80);//was 80
-
+server.listen(80);
 
 
 client.once(Events.ClientReady, c => {
@@ -177,34 +170,6 @@ client.on('guildMemberAdd', member => {
 //========================================================================
 // end welcome bot
 //========================================================================
-
-//========================================================================
-// Slash Command Builder Last Updated (?/?/????)
-//========================================================================
-
-//https://replit.com/@anonimusas/DiscordJS-V14-Bot-Template#index.js
-
-//const { SlashCommandBuilder } = require('discord.js');
-
-const data = new SlashCommandBuilder()
-  .setName('echo')
-  .setDescription('Replies with your input!')
-  .addStringOption(option =>
-    option.setName('input')
-      .setDescription('The input to echo back'));
-/*.addChannelOption(option =>
-  option.setName('channel')
-    .setDescription('The channel to echo into'));
-*/
-
-// Create a slash command builder
-const pingCommand = new SlashCommandBuilder().setName('ping').setDescription('Check if this interaction is responsive');
-// Get the raw data that can be sent to Discord
-const rawData = pingCommand.toJSON();
-
-//========================================================================
-//========================================================================
-
 
 
 //========================================================================
@@ -329,6 +294,7 @@ function RemoveRole(member, role) {
 
 
 //========================================================================
+//react to gain/remove roles last updated (?/?/????)
 //========================================================================
 //reaction working
 function reactionroles() {
@@ -516,18 +482,12 @@ function reactionroles() {
 
 
 //========================================================================
-//========================================================================
-
-//function day_data() {}
-
-//========================================================================
+//Get Lates YouTube Video
 //========================================================================
 
 //start detect video
 function handleUploads() {
   if (client.db.fetch(`postedVideos`) === null) client.db.set(`postedVideos`, []);
-  //   setInterval(() => { //non needed interval
-  //new section
   console.log("Video_checked");
 
   const Gather_json_file_data = async () => {
