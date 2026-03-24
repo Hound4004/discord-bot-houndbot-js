@@ -232,12 +232,17 @@ client.on('messageCreate', (message) => {
 //Swear Bot
 function Swear_detect(message_content,message) {
   const { bad_words } = require('./Swear_Bot_vocab.js');
-    bad_words.forEach(bad_word => {
-        if (message_content.includes(bad_word)) {
-            message.reply("No swearing please! 😊");
-            message.react('❌');
-        }
-    });
+  let message_contains_bad_word = false
+
+  bad_words.forEach(bad_word => {
+    if (message_content.includes(bad_word)) {
+      message_contains_bad_word = true
+    }
+  });
+  if (message_contains_bad_word==true){
+    message.reply("No swearing please! 😊");
+    message.react('❌');
+  }
 }
 
   
