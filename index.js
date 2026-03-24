@@ -1,9 +1,12 @@
+// ============================================================================================================
+// This is Hound4004's Discord bot called Houndbot4004 for his Discorder Server "Houndcord4004" 
+// This bot's index was last updated (3/24/2026)
+// ============================================================================================================
 
 
-
-// ===============================================================================
+// ============================================================================================================
 // GLOBAL ERROR HANDLING Updated (3/24/2026)
-// ===============================================================================
+// ============================================================================================================
 
 // Catch sync errors (crashes)
 process.on('uncaughtException', (err) => {
@@ -17,9 +20,7 @@ process.on('unhandledRejection', (reason, promise) => {
   console.error('Reason:', reason);
 });
 
-// ===============================================================================
-
-
+// ============================================================================================================
 
 const { Client, Intents, MessageButton, MessageActionRow, ButtonBuilder, ButtonStyle, MessageEmbed, EmbedBuilder, Partials, Events, Collection, WebhookClient, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
 
@@ -49,7 +50,6 @@ const client = new Client({
 
 const userWarnings = {};
 
-
 client.events = new Collection();
 client.commands = new Collection();
 client.slashCommands = new Collection();
@@ -64,9 +64,9 @@ client.request = new (require("rss-parser"))();
 require('events').EventEmitter.defaultMaxListeners = 20;
 
 
-// ===============================================================================
+// ============================================================================================================
 // Discord (client) ERROR HANDLING Updated (3/24/2026)
-// ===============================================================================
+// ============================================================================================================
 // Discord client errors
 client.on('error', (err) => {
   console.error('🤖 Discord Client Error:', err);
@@ -89,7 +89,10 @@ client.on('shardReconnecting', (shardId) => {
 // ===============================================================================
 
 
-//files data
+// ============================================================================================================
+//files data: Last updated (?/?/????)
+// ============================================================================================================
+
 const keepAlive = require("./server");
 require('./server.js');
 
@@ -162,11 +165,8 @@ function start_up() {
 
 
 //========================================================================
-//========================================================================
 //welcome bot
-
-//-------------------------------------------------------------------------
-
+//========================================================================
 client.on('guildMemberAdd', member => {
   const welcome_channel = client.channels.cache.get('700732150529392741');
   welcome_channel.send(`<@${member.id}> Welcome to the server! Before you start, please check <#${695022777081528363}>`);
@@ -174,37 +174,15 @@ client.on('guildMemberAdd', member => {
   member.roles.add(Role_Testrole).catch(console.error);
   console.log("welcome_2 worked");
 });
-
 //========================================================================
-//========================================================================
-//-------------------------------------------------------------------------
-//works, fires multiple times!
-const triggerWords = ['banana', 'fire', 'white'];
-
-client.on('messageCreate', (message) => {
-  //if (message.author.bot) return false;
-  triggerWords.forEach((word) => {
-    if (message.content.includes(word) && message.author.id != 946745700966891550) {
-      message.reply(message.content);
-    }
-  });
-});
-//-------------------------------------------------------------------------
-client.on("messageCreate", msg => {
-  if (msg.content == "hi") {
-    msg.reply({ content: 'hello', allowedMentions: { repliedUser: false } });
-  }
-});
-
-
-//========================================================================
+// end welcome bot
 //========================================================================
 
+//========================================================================
+// Slash Command Builder Last Updated (?/?/????)
+//========================================================================
 
 //https://replit.com/@anonimusas/DiscordJS-V14-Bot-Template#index.js
-
-
-
 
 //const { SlashCommandBuilder } = require('discord.js');
 
@@ -217,38 +195,35 @@ const data = new SlashCommandBuilder()
 /*.addChannelOption(option =>
   option.setName('channel')
     .setDescription('The channel to echo into'));
-
 */
-
-
-
-
-//test
-
 
 // Create a slash command builder
 const pingCommand = new SlashCommandBuilder().setName('ping').setDescription('Check if this interaction is responsive');
 // Get the raw data that can be sent to Discord
 const rawData = pingCommand.toJSON();
 
-
-//end test
-
-
-
-
-
 //========================================================================
 //========================================================================
 
 
 
-
-//-------------------------------------------------------------------------
-
-
 //========================================================================
+// User input (messgae) detection Last update (3/24/2026)  
+// Need to only have one client.on('messageCreate'.... fix this soon!
 //========================================================================
+//works, fires multiple times!
+const triggerWords = ['banana', 'fire', 'white'];
+
+client.on('messageCreate', (message) => {
+  triggerWords.forEach((word) => {
+    if (message.content.includes(word) && message.author.id != 946745700966891550) {
+      message.reply(message.content);
+    });
+  
+  if (message.content == "hi") {
+    message.reply({ content: 'hello', allowedMentions: { repliedUser: false } });
+  }
+});
 
 //Swear Bot
 function Swear_detect() {
@@ -522,9 +497,7 @@ function reactionroles() {
 //========================================================================
 //========================================================================
 
-
 //function day_data() {}
-//triggers every minute
 
 //========================================================================
 //========================================================================
@@ -536,15 +509,10 @@ function handleUploads() {
   //new section
   console.log("Video_checked");
 
-
   const Gather_json_file_data = async () => {
     const data_gathered = fs.readFileSync('./json.sqlite');
     return data_gathered;
   };
-
-
-
-
 
   client.request.parseURL(`https://www.youtube.com/feeds/videos.xml?channel_id=${client.config.channel_id}`)
     .then(data => {
@@ -565,7 +533,6 @@ function handleUploads() {
         //delete word_test
         delete_word_json();
         function delete_word_json() {
-
 
           Gather_json_file_data().then(data_gathered => {
             console.log("gathered video data 1");
@@ -599,7 +566,6 @@ function handleUploads() {
           });
         }
         //End_delete word_test
-
 
 
         var title_check = /{title}/g;
