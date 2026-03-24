@@ -218,7 +218,7 @@ client.on('messageCreate', (message) => {
   triggerWords.forEach((word) => {
     if (message.content.includes(word) && message.author.id != 946745700966891550) {
       message.reply(message.content);
-    });
+    })
   
   if (message.content == "hi") {
     message.reply({ content: 'hello', allowedMentions: { repliedUser: false } });
