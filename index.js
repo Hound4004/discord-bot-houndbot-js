@@ -1,6 +1,6 @@
 // ============================================================================================================
 // This is Hound4004's Discord bot called Houndbot4004 for his Discorder Server "Houndcord4004" 
-// This bot's index was last updated (3/24/2026)
+// This bot's index was last updated (3/25/2026)
 // ============================================================================================================
 
 // ============================================================================================================
@@ -82,21 +82,11 @@ client.on('shardReconnecting', (shardId) => {
 
 
 // ============================================================================================================
-//files data: Last updated (?/?/????)
+//files data: and logged in Last updated (3/25/2026)
 // ============================================================================================================
 
 const keepAlive = require('./server.js');
 client.config = require("./config.js");//for video notifier
-
-var http = require('http');
-var server = http.createServer(function(req, res) {
-  res.end('test');
-});
-server.on('listening', function() {
-  console.log('ok, server is running');
-});
-server.listen(80);
-
 
 client.once(Events.ClientReady, c => {
   console.log(`Logged in as ${c.user.tag}`);
@@ -134,21 +124,14 @@ client.on('messageCreate', async (message) => {
   }
 });
 
-//put all functions inside of this? no need to run if bot isn't on!
-var Check_Functions = 0;
+//========================================================================
+//run all functions
+//========================================================================
 function start_up() {
-  //day_data(); //good example https://replit.com/talk/ask/bot-turns-off/86551
-
   Swear_detect();
-  console.log(Check_Functions);
-  //commands_call();
   reactionroles();
   handleUploads();
   setInterval(handleUploads, 60000);
-
-  if (Check_Functions == 3) {
-    console.log(Check_Functions + ": All Functions running correctly");
-  }  //else {clearInterval(date_check_time_interval);}
 }
 
 
@@ -231,7 +214,6 @@ function Swear_detect(message_content,message) {
     
     message.delete().catch(console.error);
   }
-  Check_Functions = Check_Functions + 1;
 }
 //========================================================================
 //end swear bot
@@ -435,6 +417,7 @@ function reactionroles() {
 
 //start detect video
 function handleUploads() {
+  console.log("🟢 YouTube checker running at:", new Date().toLocaleTimeString()); // DEBUG
   if (client.db.fetch(`postedVideos`) === null) client.db.set(`postedVideos`, []);
   console.log("Video_checked");
 
@@ -554,7 +537,6 @@ function handleUploads() {
       }
     });
   //}); //non needed interval end
-  Check_Functions = Check_Functions + 1;
 }
 //end detect video
 
