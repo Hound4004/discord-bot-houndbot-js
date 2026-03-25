@@ -89,9 +89,12 @@ const keepAlive = require('./server.js');
 client.config = require("./config.js");//for video notifier
 
 client.once(Events.ClientReady, c => {
-  console.log(`Logged in as ${c.user.tag}`);
+  console.log(`✅ Logged in as ${c.user.tag}`);
+  console.log("Starting start_up()...");
   start_up();
+  console.log("start_up() completed!");
 });
+
 const ROLE_IDS = [
   '1107297102788300911',
   '1107296662621257800',
@@ -125,15 +128,23 @@ client.on('messageCreate', async (message) => {
 });
 
 //========================================================================
-//run all functions
+//start_up function| run all functions | last Updated (3/25/2026)
 //========================================================================
 function start_up() {
+  console.log("📍 start_up: Starting Swear_detect...");
   Swear_detect();
+  
+  console.log("📍 start_up: Starting reactionroles...");
   reactionroles();
+  
+  console.log("📍 start_up: Starting handleUploads...");
   handleUploads();
+  
+  console.log("📍 start_up: Setting interval for handleUploads...");
   setInterval(handleUploads, 60000);
+  
+  console.log("✅ start_up: All functions started!");
 }
-
 
 //========================================================================
 //welcome bot
