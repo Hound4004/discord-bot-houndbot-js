@@ -1,6 +1,6 @@
 // ============================================================================================================
 // This is Hound4004's Discord bot called Houndbot4004 for his Discorder Server "Houndcord4004" 
-// This bot's index was last updated (3/25/2026)
+// This bot's index was last updated (3/26/2026)
 // ============================================================================================================
 
 // ============================================================================================================
@@ -384,10 +384,8 @@ function reactionroles() {
 
 
 //========================================================================
-//Get Lates YouTube Video
+//Get Latest Hound4004 YouTube Video / detect video
 //========================================================================
-
-//start detect video
 function handleUploads() {
   if (client.db.fetch(`postedVideos`) === null) client.db.set(`postedVideos`, []);
   console.log("Video_checked");
@@ -408,10 +406,6 @@ function handleUploads() {
         let channel = client.channels.cache.get(client.config.Discord_Video_channel);
         if (!channel) return;
 
-        /*flaged
-        ===============================================
-        ===============================================
-        */
         //below should only delete the old, if a new video is posted!
         //delete word_test
         delete_word_json();
@@ -450,22 +444,13 @@ function handleUploads() {
         }
         //End_delete word_test
 
-
         var title_check = /{title}/g;
         if (title_check == "chicken") { console.log("Cluck"); } else {
-
-          //other thing above goes here
           console.log("test");
-
+          
           Gather_json_file_data().then(data_gathered => {
             console.log(data_gathered);
             if (data_gathered.includes("News")) {
-              //dosent like .toLowerCase()
-
-              /*end flaged
-              ===============================================
-              ===============================================
-              */
               console.log("News Video type");
               let message_video = client.config.messageTemplateMCN
                 .replace(/{author}/g, parsed.author)
@@ -474,12 +459,6 @@ function handleUploads() {
                 .replace(/{url}/g, parsed.link);
               channel.send(message_video);
             } else if (data_gathered.includes("Shorts")) {
-              //dosent like .toLowerCase()
-
-              /*end flaged
-              ===============================================
-              ===============================================
-              */
               console.log("Short Video");
               let message_video = client.config.messageTemplateSHT
                 .replace(/{author}/g, parsed.author)
@@ -496,12 +475,8 @@ function handleUploads() {
                 .replace(/{url}/g, parsed.link);
               channel.send(message_video);
             }
-
             console.log("Video Posted!!?!?");
-          });//.catch(err => {
-          // console.log('some error occured in using/gathering data');
-          // return data_gathered;
-          //   }) //end Data_gathered //end of requirefile
+          });
         }//end chicken ELSE
         console.log("maybe_2");
 
@@ -512,14 +487,13 @@ function handleUploads() {
 //end detect video
 
 //========================================================================
+// Keep bot alive! | Last updated (3/26/2026)
 //========================================================================
-
-//need
 Bot_Alive();
 function Bot_Alive() {
   login_do();
-  keepAlive();
-} //this is the // at the bottem
+  keepAlive(); // keepAlive() on server.js
+} 
 
 function login_do() {
   client.login(process.env.TOKEN)
