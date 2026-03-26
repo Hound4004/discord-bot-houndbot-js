@@ -90,7 +90,7 @@ client.once(Events.ClientReady, c => {
 
 
 //========================================================================
-//start_up function| run all functions | last Updated (3/25/2026)
+//start_up() function| run all functions | last Updated (3/25/2026)
 //========================================================================
 function start_up() {
   // (functions like swear _detect are called on the user input later in the code! 
@@ -108,7 +108,7 @@ function start_up() {
 }
 
 //========================================================================
-//welcome bot
+// welcome bot
 //========================================================================
 client.on('guildMemberAdd', member => {
   const welcome_channel = client.channels.cache.get('700732150529392741');
@@ -144,9 +144,9 @@ client.on('messageCreate', (message) => {
   Swear_detect(message_content, message); //This calls to the swear detect function below. passes the message to said fuction
 });
 
-
-//Swear Bot
-
+//========================================================================
+//Swear Bot function last updated (3/26/2026)
+//========================================================================
 const recentSwears = {};
 
 function Swear_detect(message_content,message) {
@@ -154,11 +154,13 @@ function Swear_detect(message_content,message) {
   const userId = message.author.id;
   let message_contains_bad_word = false
 
-  bad_words.forEach(bad_word => {
-    if (message_content.includes(bad_word)) {
-      message_contains_bad_word = true
+  for (const bad_word of bad_words) {
+    const bad_word_pattern = new RegExp(`\\b${bad_word}\\b`, 'i');     // \b matches word boundaries (spaces, punctuation, start/end)
+    if (bad_word_pattern.test(message_content)) {
+      message_contains_bad_word = true;
+      break;
     }
-  });
+  }
 
   if(message_contains_bad_word==true){
     const now = Date.now();   // Get current time
@@ -166,7 +168,7 @@ function Swear_detect(message_content,message) {
     if (!recentSwears[userId]) {
       recentSwears[userId] = [];
     }
-    recentSwears[userId] = recentSwears[userId].filter(time => now - time < 300000);
+    recentSwears[userId] = recentSwears[userId].filter(time => now - time < 300000); // 5 minutes
         recentSwears[userId].push(now);
     
     // Count swears in last 5 minutes
