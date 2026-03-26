@@ -42,13 +42,6 @@ const client = new Client({
   ]
 });
 
-client.events = new Collection();
-client.commands = new Collection();
-client.slashCommands = new Collection();
-client.aliases = new Collection();
-//client.prefix = config.prefix
-
-
 const fs = require("fs");
 client.db = require("quick.db");
 client.request = new (require("rss-parser"))();
@@ -95,37 +88,6 @@ client.once(Events.ClientReady, c => {
   console.log("start_up() completed!");
 });
 
-const ROLE_IDS = [
-  '1107297102788300911',
-  '1107296662621257800',
-  '1107296255794745354',
-  '1112062613640200292',
-  '1107294677171974207',
-  '1107293670991999026',
-  '1107292972262903888',
-  '1107291772784222330'
-];
-
-client.on('messageCreate', async (message) => {
-  console.log("message");
-  if (message.content === '!assign_roles') {
-    console.log("assigning roles");
-    try {
-      const guild = client.guilds.cache.get('599652841132392476');
-      const members = await guild.members.fetch();
-      members.forEach(async (member) => {
-        for (const roleID of ROLE_IDS) {
-          const role = guild.roles.cache.get(roleID);
-          await member.roles.add(role);
-        }
-      });
-      message.channel.send('Roles assigned to all members!');
-    } catch (error) {
-      console.error(error);
-      message.channel.send('An error occurred while assigning roles.');
-    }
-  }
-});
 
 //========================================================================
 //start_up function| run all functions | last Updated (3/25/2026)
