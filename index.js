@@ -140,7 +140,7 @@ function start_up() {
   handleUploads();
   
   console.log("📍 start_up: Setting interval for handleUploads...");
-  setInterval(handleUploads, 60000);
+  setInterval(handleUploads, 100000);
   
   console.log("✅ start_up: All functions started!");
 }
@@ -427,7 +427,6 @@ function reactionroles() {
 
 //start detect video
 function handleUploads() {
-  console.log("🟢 YouTube checker running at:", new Date().toLocaleTimeString()); // DEBUG
   if (client.db.fetch(`postedVideos`) === null) client.db.set(`postedVideos`, []);
   console.log("Video_checked");
 
