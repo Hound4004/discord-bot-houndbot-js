@@ -131,8 +131,7 @@ client.on('messageCreate', async (message) => {
 //start_up function| run all functions | last Updated (3/25/2026)
 //========================================================================
 function start_up() {
-  console.log("📍 start_up: Starting Swear_detect...");
-  Swear_detect();
+  // (functions like swear _detect are called on the user input later in the code! 
   
   console.log("📍 start_up: Starting reactionroles...");
   reactionroles();
