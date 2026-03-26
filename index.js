@@ -174,18 +174,20 @@ function Swear_detect(message_content,message) {
     // Count swears in last 5 minutes
     const swearCount = recentSwears[userId].length;
     
-    message.react('❌');
+    message.react('❌').catch(console.error);
+    let swear_warning_Message_reply = "";
+
     
     if (swearCount == 1) {
-      message.reply("No swearing please! 😊");
+      swear_warning_Message_reply = "No swearing please! 😊";
     }
     else if (swearCount == 2) {
-      message.reply("I already told you! No swearing! ⚠️");
+      swear_warning_Message_reply = "I already told you! No swearing! ⚠️";
     }
     else if (swearCount >= 3) {
-      message.reply("FINAL WARNING! Stop swearing or you'll be muted! 🚫");
+      swear_warning_Message_reply = "FINAL WARNING! Stop swearing or you'll be muted! 🚫";
     }
-    
+    message.channel.send(`<@${message.author.id}>, ${swear_warning_Message_reply}`).catch(console.error);
     message.delete().catch(console.error);
   }
 }
