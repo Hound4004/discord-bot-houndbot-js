@@ -395,27 +395,6 @@ function reactionroles() {
 function Random_Holiday_of_the_Day() {
   const holidayChannel = client.channels.cache.get(process.env.DISCORD_HOLLIDAY_CHAT_ID);  
   try {
-    // ========== ADD THIS DEBUG SECTION ==========
-    console.log("========== HOLIDAY DEBUG ==========");
-    console.log("Current directory:", __dirname);
-    
-    const files = fs.readdirSync('./');
-    console.log("Files in directory:", files);
-    
-    // Check if file exists
-    if (fs.existsSync('./random_holidays.txt')) {
-      console.log('✅ random_holidays.txt found!');
-    } else {
-      console.log('❌ random_holidays.txt NOT found');
-    }
-    const specificFile = './Random Holidays.txt';  // Use your exact filename
-    if (fs.existsSync(specificFile)) {
-      console.log(`✅ ${specificFile} found!`);
-    } else {
-      console.log(`❌ ${specificFile} NOT found`);
-    }
-    // ========== END DEBUG SECTION ==========
-
     // Read the holidays file
     const data = fs.readFileSync('./Random Holidays.txt', 'utf8');
     const lines = data.split('\n');
