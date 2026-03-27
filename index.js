@@ -408,10 +408,16 @@ function Random_Holiday_of_the_Day() {
     } else {
       console.log('❌ random_holidays.txt NOT found');
     }
+    const specificFile = './Random Holidays.txt';  // Use your exact filename
+    if (fs.existsSync(specificFile)) {
+      console.log(`✅ ${specificFile} found!`);
+    } else {
+      console.log(`❌ ${specificFile} NOT found`);
+    }
     // ========== END DEBUG SECTION ==========
 
     // Read the holidays file
-    const data = fs.readFileSync('./random_holidays.txt', 'utf8');
+    const data = fs.readFileSync('./Random Holidays.txt', 'utf8');
     const lines = data.split('\n');
     
     // Get today's date in MM/DD format
