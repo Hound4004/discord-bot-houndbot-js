@@ -90,7 +90,7 @@ client.once(Events.ClientReady, c => {
 
 
 //========================================================================
-//start_up() function| run all functions | last Updated (3/25/2026)
+//start_up() function| run all functions | last Updated (3/26/2026)
 //========================================================================
 function start_up() {
   // (functions like swear _detect are called on the user input later in the code! 
@@ -103,6 +103,9 @@ function start_up() {
   
   console.log("📍 start_up: Setting interval for handleUploads...");
   setInterval(handleUploads, 100000);
+  
+  console.log("📍 start_up: Setting Random Holiday function...");
+  Random_Holiday_of_the_Day();
   
   console.log("✅ start_up: All functions started!");
 }
@@ -386,6 +389,43 @@ function reactionroles() {
   }
 }
 
+//========================================================================
+// Random Holiday of the Day - last updated (3/26/2026)
+//========================================================================
+function Random_Holiday_of_the_Day() {
+  const holidayChannel = client.channels.cache.get(process.env.DISCORD_HOLLIDAY_CHAT_ID);  
+  try {
+    // Read the holidays file
+    const data = fs.readFileSync('./random_holidays.txt', 'utf8');
+    const lines = data.split('\n');
+    
+    // Get today's date in MM/DD format
+    const today = new Date();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const todayCode = `${month}/${day}`;
+    
+    // Find today's holiday
+    let holidayMessage = "";
+    for (const line of lines) {
+      if (line.startsWith(todayCode)) {
+        holidayMessage = line.substring(6); // Remove the "01/01 " part
+        break;
+      }
+    }
+    
+    // Send to Discord
+    const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+    holidayChannel.send(`📅 **${formattedDate}**\n🎉 Today's Random Holiday: **${holidayMessage}**`);
+    console.log(`📅 Sent holiday: ${holidayMessage}`);
+    
+  } catch (error) {
+    console.error('❌ Failed to send holiday:', error.message);
+  }
+}
+//========================================================================
+// END Random Holiday
+//========================================================================
 
 //========================================================================
 //Get Latest Hound4004 YouTube Video / detect video
