@@ -1,6 +1,6 @@
 // ============================================================================================================
 // This is Hound4004's Discord bot called Houndbot4004 for his Discorder Server "Houndcord4004" 
-// This bot's index was last updated (3/26/2026)
+// This bot's index was last updated (3/28/2026)
 // ============================================================================================================
 
 // ============================================================================================================
@@ -378,28 +378,33 @@ function reactionroles() {
 }
 
 //========================================================================
-// Random Holiday of the Day - last updated (3/26/2026)
+// Random Holiday of the Day - last updated (3/28/2026)
 //========================================================================
 let lastHolidayDate = "";
 
 function Random_Holiday_of_the_Day() {
   const today = new Date();
-  const todayStr = `${today.getMonth() + 1}/${today.getDate()}`;
+  const todayMonth = today.getMonth() + 1;  // 3 (number)
+  const todayDay = today.getDate();         // 28 (number)
   const fullDate = today.toDateString();
   
   // If we already posted today, stop
   if (lastHolidayDate === fullDate) return;
   
   const holidayChannel = client.channels.cache.get(process.env.DISCORD_HOLLIDAY_CHAT_ID);
-  if (!holidayChannel) return;
   
   try {
     const data = fs.readFileSync('./Random Holidays.txt', 'utf8');
     const lines = data.split('\n');
     
-    let holidayMessage = "No special holiday today! Make your own! 🎉";
+    let holidayMessage = "No special holiday found... Hmmm.. yell at Hound4004 to fix me!";
     for (const line of lines) {
-      if (line.startsWith(todayStr)) {
+      // Get the date part (first 5 characters like "03/28")
+      const datePart = line.substring(0, 5);
+      const fileMonth = parseInt(datePart.substring(0, 2));  // "03" → 3
+      const fileDay = parseInt(datePart.substring(3, 5));    // "28" → 28
+      
+      if ((fileMonth === todayMonth) && (fileDay === todayDay)) {
         holidayMessage = line.substring(6);
         break;
       }
