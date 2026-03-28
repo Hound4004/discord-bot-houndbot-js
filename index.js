@@ -71,9 +71,6 @@ client.on('shardReconnecting', (shardId) => {
   console.log(`🔄 Shard ${shardId} reconnecting...`);
 });
 
-// ===============================================================================
-
-
 // ============================================================================================================
 //files data: and logged in Last updated (3/25/2026)
 // ============================================================================================================
@@ -88,7 +85,6 @@ client.once(Events.ClientReady, c => {
   console.log("start_up() completed!");
 });
 
-
 //========================================================================
 //start_up() function| run all functions | last Updated (3/26/2026)
 //========================================================================
@@ -100,13 +96,12 @@ function start_up() {
   
   console.log("📍 start_up: Starting handleUploads...");
   handleUploads();
-  
-  console.log("📍 start_up: Setting interval for handleUploads...");
   setInterval(handleUploads, 100000);
   
   console.log("📍 start_up: Setting Random Holiday function...");
   Random_Holiday_of_the_Day();
-  
+  setInterval(Random_Holiday_of_the_Day, 12 * 60 * 60 * 1000); // Check every 12 hours
+
   console.log("✅ start_up: All functions started!");
 }
 
@@ -124,7 +119,6 @@ client.on('guildMemberAdd', member => {
 // end welcome bot
 //========================================================================
 
-
 //========================================================================
 // User input (messgae) detection Last update (3/24/2026)  
 // Need to only have one client.on('messageCreate'.... fix this soon!
@@ -139,6 +133,9 @@ client.on('messageCreate', (message) => {
     if (message_content.includes(word) && message.author.id != 946745700966891550) {
       message.reply(message_content);
     }})
+    if (message_content.includes("houndbot")){
+      message.react('🤖').catch(console.error);
+    }
   
   if (message_content == "hi") {
     message.reply({ content: 'hello', allowedMentions: { repliedUser: false } });
@@ -176,11 +173,8 @@ function Swear_detect(message_content,message) {
     
     // Count swears in last 5 minutes
     const swearCount = recentSwears[userId].length;
-    
-    message.react('❌').catch(console.error);
     let swear_warning_Message_reply = "";
 
-    
     if (swearCount == 1) {
       swear_warning_Message_reply = "No swearing please! 😊";
     }
@@ -197,10 +191,6 @@ function Swear_detect(message_content,message) {
 //========================================================================
 //end swear bot
 //========================================================================
-
-  
-
-
 
 //========================================================================
 //react to gain/remove roles last updated (?/?/????)
@@ -224,9 +214,7 @@ function reactionroles() {
 
   client.on("messageReactionAdd", async (reaction, user) => {
     const reactedMessageId = reaction.message.id;
-    const matchedReaction = reactions.find(
-      (react) => react.messageId === reactedMessageId && react.emoji === reaction.emoji.name
-    );
+    const matchedReaction = reactions.find((react) => react.messageId === reactedMessageId && react.emoji === reaction.emoji.name);
 
     if (matchedReaction && matchedReaction.function) {
       matchedReaction.function(user);
@@ -392,35 +380,38 @@ function reactionroles() {
 //========================================================================
 // Random Holiday of the Day - last updated (3/26/2026)
 //========================================================================
+let lastHolidayDate = "";
+
 function Random_Holiday_of_the_Day() {
-  const holidayChannel = client.channels.cache.get(process.env.DISCORD_HOLLIDAY_CHAT_ID);  
+  const today = new Date();
+  const todayStr = `${today.getMonth() + 1}/${today.getDate()}`;
+  const fullDate = today.toDateString();
+  
+  // If we already posted today, stop
+  if (lastHolidayDate === fullDate) return;
+  
+  const holidayChannel = client.channels.cache.get(process.env.DISCORD_HOLLIDAY_CHAT_ID);
+  if (!holidayChannel) return;
+  
   try {
-    // Read the holidays file
     const data = fs.readFileSync('./Random Holidays.txt', 'utf8');
     const lines = data.split('\n');
     
-    // Get today's date in MM/DD format
-    const today = new Date();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    const todayCode = `${month}/${day}`;
-    
-    // Find today's holiday
-    let holidayMessage = "";
+    let holidayMessage = "No special holiday today! Make your own! 🎉";
     for (const line of lines) {
-      if (line.startsWith(todayCode)) {
-        holidayMessage = line.substring(6); // Remove the "01/01 " part
+      if (line.startsWith(todayStr)) {
+        holidayMessage = line.substring(6);
         break;
       }
     }
     
-    // Send to Discord
     const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
     holidayChannel.send(`📅 **${formattedDate}**\n🎉 Today's Random Holiday: **${holidayMessage}**`);
+    lastHolidayDate = fullDate;
     console.log(`📅 Sent holiday: ${holidayMessage}`);
     
   } catch (error) {
-    console.error('❌ Failed to send holiday:', error.message);
+    console.error('Holiday error:', error.message);
   }
 }
 //========================================================================
