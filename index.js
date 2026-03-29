@@ -1,6 +1,6 @@
 // ============================================================================================================
 // This is Hound4004's Discord bot called Houndbot4004 for his Discorder Server "Houndcord4004" 
-// This bot's index was last updated (3/28/2026)
+// This bot's index was last updated (3/29/2026)
 // ============================================================================================================
 
 // ============================================================================================================
@@ -86,7 +86,7 @@ client.once(Events.ClientReady, c => {
 });
 
 //========================================================================
-//start_up() function| run all functions | last Updated (3/26/2026)
+//start_up() function| run all functions | last Updated (3/29/2026)
 //========================================================================
 function start_up() {
   // (functions like swear _detect are called on the user input later in the code! 
@@ -96,7 +96,7 @@ function start_up() {
   
   console.log("📍 start_up: Starting handleUploads...");
   handleUploads();
-  setInterval(handleUploads, 100000);
+  setInterval(handleUploads, 300000); // every 5 minutes
   
   console.log("📍 start_up: Setting Random Holiday function...");
   Random_Holiday_of_the_Day();
@@ -111,9 +111,10 @@ function start_up() {
 client.on('guildMemberAdd', member => {
   const welcome_channel = client.channels.cache.get('700732150529392741');
   welcome_channel.send(`<@${member.id}> Welcome to the server! Before you start, please check <#${695022777081528363}>`);
+  
   let Role_Testrole = member.guild.roles.cache.find(r => r.name === "DISCORD_ROLES_REACT_ROBOT_EMOJI_ID");
   member.roles.add(Role_Testrole).catch(console.error);
-  console.log("welcome_2 worked");
+  console.log("welcome worked");
 });
 //========================================================================
 // end welcome bot
